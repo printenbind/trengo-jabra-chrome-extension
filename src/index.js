@@ -18,7 +18,10 @@ const waitForPickup = async () => {
           deviceCallControl.deviceSignals.subscribe((signal) => {
             console.log(SignalType[signal.type], signal)
             if (signal.value && SignalType.HOOK_SWITCH === signal.type) {
-                onPickup()
+                pickupOrHangup()
+            }
+            if (!signal.value && SignalType.ONLINE === signal.type) {
+              hangup()
             }
           });
         } else {
@@ -28,7 +31,7 @@ const waitForPickup = async () => {
   });
 }
 
-const onPickup = () => {
+const pickupOrHangup = () => {
   console.log('Phone hook trigger')
   let pickupUpButton = null;
   let hangUpButton = null;
@@ -55,6 +58,26 @@ const onPickup = () => {
     console.log('Hangup successfull')
   } else {
     console.log('Phone window not visible')
+  }
+}
+
+const hangup = () => {
+  let button = null;
+
+  const collection = document.getElementsByClassName("material-icons");
+  for (let item of collection) {
+    if (item.textContent === 'call_end') {
+      if (item.offsetParent !== null && item.parentNode.classList.contains('call-action-icon-red')) {
+        button = item.parentNode
+      }
+    }
+  }
+
+  if (button) {
+    button.click()
+    console.log('Hangup successfull')
+  } else {
+    console.log('Phone window not visible for hangup')
   }
 }
 
