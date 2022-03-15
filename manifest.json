@@ -1,8 +1,13 @@
 {
-    "name": "Print&Bind Trengo Extension",
-    "description": "To improve trengo until they do",
+    "name": "Unofficial Trengo Jabra Extension",
+    "description": "Allow Jabra headsets to pick and hangup Trengo automatically",
     "version": "1.0",
     "manifest_version": 3,
+    "icons": {
+        "16": "dist/16.png",
+        "48": "dist/48.png",
+        "128": "dist/128.png"
+    },
     "content_scripts": [
         {
             "matches": [
