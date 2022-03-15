@@ -1,19 +1,32 @@
 import { init, SignalType, CallControlFactory, RequestedBrowserTransport }  from '@gnaudio/jabra-js';
 
 
+
+let api = null
+let callControlFactory = null;
+let deviceCallControl = null;
+
 const waitForPickup = async () => {
-  const api = await init({
-    transport: RequestedBrowserTransport.CHROME_EXTENSION
-  });
-  const callControlFactory = new CallControlFactory(api);
+  if (!api) {
+    api = await init({
+      transport: RequestedBrowserTransport.CHROME_EXTENSION
+    });
+  }
+  if (!callControlFactory) {
+    callControlFactory = new CallControlFactory(api);
+  }
 
-  api.deviceList.subscribe((devices) => {
-    devices.forEach(async (device) => {
-        console.log(`Phone found ${device.name} - ${device.productId}`)
-        const deviceCallControl = await callControlFactory.createCallControl(device);
-        const gotLock = await deviceCallControl.takeCallLock();
+  api.deviceList.subscribe(async (devices) => {
+    if (devices.length > 0) {
+      const device = devices[0];
+      console.log(`Phone found ${device.name} - ${device.productId}`)
 
-        if (gotLock) {
+      if (!deviceCallControl) {
+        deviceCallControl = await callControlFactory.createCallControl(device);
+      }
+
+      try {
+        if (await deviceCallControl.takeCallLock()) {
           console.log('Phone lock successfull')
           deviceCallControl.deviceSignals.subscribe((signal) => {
             console.log(SignalType[signal.type], signal)
@@ -27,7 +40,10 @@ const waitForPickup = async () => {
         } else {
           console.log('Failed to get phone lock')
         }
-    });
+      } catch (error) {
+        console.log('Failed to get phone lock hard')
+      }
+    }
   });
 }
 
