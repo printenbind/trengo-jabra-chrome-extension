@@ -1,0 +1,16 @@
+{
+    "name": "Print&Bind Trengo Extension",
+    "description": "To improve trengo until they do",
+    "version": "1.0",
+    "manifest_version": 3,
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.trengo.com/*"
+            ],
+            "js": [
+                "dist/main.js"
+            ]
+        }
+    ]
+}
