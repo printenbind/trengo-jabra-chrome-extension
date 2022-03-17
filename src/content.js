@@ -3,6 +3,14 @@ import delay  from 'delay';
 
 let api = null
 let callControlFactory = null;
+let navigated = false;
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  if (request && request.type === 'navigation') {
+    navigated = true;
+  }
+  sendResponse(true);
+});
 
 const initialize = async () => {
   api = await init({
@@ -37,7 +45,7 @@ const getLock = async (control) => {
 
 const listen = async (control) => {
   return new Promise(async (resolve, reject) => {
-    console.log('Device lock successfull')
+    console.log("Waiting for device signal")
     const subscription = control.deviceSignals.subscribe((signal) => {
       console.log(SignalType[signal.type], signal)
       if (signal.value && SignalType.HOOK_SWITCH === signal.type) {
@@ -47,7 +55,11 @@ const listen = async (control) => {
         hangup()
       }
     });
-    await delay(60000);
+
+    while (navigated === false && isConnected(control)) {
+      await delay(100);
+    }
+    navigated = false;
     if (isConnected(control)) {
       control.releaseCallLock();
       subscription.unsubscribe();
@@ -59,7 +71,6 @@ const listen = async (control) => {
 const isConnected = (control) => {
   try {
     control.checkHasDisconnected()
-    console.log('Device connection stable');
     return true;
   } catch (error) {
     console.log('Device connection lost');
@@ -94,7 +105,7 @@ const pickupOrHangup = () => {
     console.log('Hangup successfull')
   } else {
     console.log('Phone window not visible')
-    // alert('piep')
+    alert('piep')
   }
 }
 
@@ -122,8 +133,10 @@ initialize().then(async () => {
   while (true) {
     const control = await waitForDevice();
     if (await getLock(control)) {
+      console.log('Device lock successfull')
       await listen(control);
     } else {
+      console.log('Cannot get a lock, trying again in 60 sec')
       await delay(60000);
     }
   }

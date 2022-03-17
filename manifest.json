@@ -8,13 +8,22 @@
         "48": "dist/48.png",
         "128": "dist/128.png"
     },
+    "host_permissions": [
+        "https://*.trengo.com/*"
+    ],
+    "permissions": [
+        "webNavigation"
+    ],
+    "background": {
+        "service_worker": "dist/background.js"
+    },
     "content_scripts": [
         {
             "matches": [
                 "https://*.trengo.com/*"
             ],
             "js": [
-                "dist/main.js"
+                "dist/content.js"
             ]
         }
     ]
