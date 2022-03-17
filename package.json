@@ -4,7 +4,8 @@
     "build": "webpack"
   },
   "dependencies": {
-    "@gnaudio/jabra-js": "^4.1.1"
+    "@gnaudio/jabra-js": "^4.1.1",
+    "delay": "^5.0.0"
   },
   "devDependencies": {
     "webpack": "^5.70.0",
