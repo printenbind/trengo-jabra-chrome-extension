@@ -13,8 +13,9 @@ MacOS https://developer.jabra.com/fileMedia/download/82f6fbc3-a024-4db1-a7ab-bfc
 Linux https://developer.jabra.com/fileMedia/download/b980b99a-9e87-42ed-b2eb-be21b1a45464  
 
 ## Install instructions
-1. Download or clone this repository to a folder on your PC
-2. Got to `chrome://extensions/`
-3. Turn on developer mode
-4. Click the load unpacked button
-5. Point to the repository folder containing the manifest.json
+1. Make sure you installed the Jabra extension and native connector
+2. Download or clone this repository to a folder on your PC
+3. Got to `chrome://extensions/`
+4. Turn on developer mode
+5. Click the load unpacked button
+6. Point to the repository folder containing the manifest.json
