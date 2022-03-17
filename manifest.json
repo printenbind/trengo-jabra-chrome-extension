@@ -8,12 +8,9 @@
         "48": "dist/48.png",
         "128": "dist/128.png"
     },
-    "host_permissions": [
-        "https://*.trengo.com/*"
-    ],
-    "permissions": [
-        "webNavigation"
-    ],
+    "action": {
+        "default_title": "Connect to Jabra headphone"
+    },
     "background": {
         "service_worker": "dist/background.js"
     },

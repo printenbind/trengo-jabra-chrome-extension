@@ -1,19 +1,32 @@
-import { init, SignalType, CallControlFactory, RequestedBrowserTransport }  from '@gnaudio/jabra-js'
+import { init, SignalType, CallControlFactory, RequestedBrowserTransport, webHidPairing }  from '@gnaudio/jabra-js'
 import delay  from 'delay'
 
 let api = null
-let navigated = false
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request && request.type === 'navigation') {
-    navigated = true
+  if (request && request.type === 'consent') {
+    var consent = document.createElement("div");
+    consent.id = 'jabraConsentID';
+    consent.innerHTML = '<div id="JumpToModal" class="modal in" style="z-index: 99999; display: block;"> <div class="modal-centered modal-centered-lg" style="height: auto; min-height: auto; transform: translate(-50%, 0px); top: 10%;"> <div class="p-8"> <h4 class="mb-4">Is your Jabra headset connected to your PC?</h4> <button id="JabraConsentYes" class="btn btn-sm rounded b-a b-2x pointer mt-4" style="color: rgb(116, 121, 142);"> Yes </button> <button id="JabraConsentNo" class="btn btn-sm rounded b-a b-2x pointer mt-4" style="color: rgb(116, 121, 142);"> No </button> </div> </div></div><div class="modal-backdrop in"></div>';
+    document.body.appendChild(consent);
+    document.body.classList.add("modal-open");
+
+    document.getElementById('JabraConsentYes').onclick = () => {
+      document.body.classList.remove("modal-open");
+      document.body.removeChild(consent);
+      webHidPairing()
+    }
+    document.getElementById('JabraConsentNo').onclick = () => {
+      document.body.classList.remove("modal-open");
+      document.body.removeChild(consent);
+    }
   }
   sendResponse(true)
 })
 
 const initialize = async () => {
   api = await init({
-    transport: RequestedBrowserTransport.CHROME_EXTENSION
+    transport: RequestedBrowserTransport.WEB_HID
   })
   console.log('Made connection with Jabra chrome extension')
 }
@@ -23,11 +36,12 @@ const getCallControll = async (device) => {
     const timeout = setTimeout(() => {
       console.log('getCallControll timeout')
       resolve(null)
-    }, 2000)
+    }, 5000)
 
     try {
       const callControlFactory = new CallControlFactory(api)
       const result = await callControlFactory.createCallControl(device)
+
       clearTimeout(timeout)
       resolve(result)
     } catch (error) {
@@ -42,7 +56,7 @@ const getLock = async (control) => {
     const timeout = setTimeout(() => {
       console.log('getLock timeout')
       resolve(false)
-    }, 2000)
+    }, 5000)
 
     try {
       const result = await control.takeCallLock()
@@ -95,10 +109,9 @@ const listen = async (control) => {
       }
     })
 
-    while (navigated === false && isConnected(control)) {
+    while (isConnected(control)) {
       await delay(100)
     }
-    navigated = false
     if (isConnected(control)) {
       control.releaseCallLock()
       subscription.unsubscribe()
@@ -162,20 +175,14 @@ const main = async () => {
   await initialize()
   while (true) {
     const control = await waitForDevice()
-    if (control) {
-      if (await getLock(control)) {
-        console.log('Device lock successfull')
-        await listen(control)
-      } else {
-        console.log('Cannot get a lock, trying again in 10 sec')
-        await delay(10000)
-      }
+    if (control && await getLock(control)) {
+      console.log('Device lock successfull')
+      await listen(control)
     } else {
-      // Jabra extension crashed because of reload race condition
-      break;
+      console.log('Cannot get a lock, trying again in 10 sec')
+      await delay(10000)
     }
   }
-  alert('Verbinding met koptelefoon verbroken, refresh (F5) de pagina a.u.b');
 }
 
 main()

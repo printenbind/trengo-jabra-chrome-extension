@@ -5,8 +5,7 @@
   },
   "dependencies": {
     "@gnaudio/jabra-js": "^4.1.1",
-    "delay": "^5.0.0",
-    "lodash.debounce": "^4.0.8"
+    "delay": "^5.0.0"
   },
   "devDependencies": {
     "webpack": "^5.70.0",
