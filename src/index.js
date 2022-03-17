@@ -94,7 +94,7 @@ const pickupOrHangup = () => {
     console.log('Hangup successfull')
   } else {
     console.log('Phone window not visible')
-    alert('piep')
+    // alert('piep')
   }
 }
 
