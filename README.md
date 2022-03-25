@@ -3,7 +3,7 @@ Chrome extension to allow Jabra headsets to pickup and hangup Trengo calls autom
 
 ## Install instructions
 1. Download or clone this repository to a folder on your PC
-2. Got to `chrome://extensions/`
+2. Go to `chrome://extensions/`
 3. Turn on developer mode
 4. Click the `load unpacked` button
 5. Point to the repository folder containing the manifest.json
