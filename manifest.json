@@ -1,7 +1,7 @@
 {
     "name": "Unofficial Trengo Jabra Extension",
     "description": "Allow Jabra headsets to pick and hangup Trengo calls automatically",
-    "version": "1.0",
+    "version": "1.0.1",
     "manifest_version": 3,
     "permissions": [
         "scripting",
