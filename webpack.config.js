@@ -10,12 +10,21 @@ var config = {
   ],
 };
 
-var contentConfig = Object.assign({}, config, {
-  name: "content",
-  entry: './src/content.js',
+var jabraConfig = Object.assign({}, config, {
+  name: "jabra",
+  entry: './src/jabra.js',
   output: {
     publicPath: '',
-    filename: 'content.js',
+    filename: 'jabra.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
+});
+var ringtoneConfig = Object.assign({}, config, {
+  name: "ringtone",
+  entry: './src/ringtone.js',
+  output: {
+    publicPath: '',
+    filename: 'ringtone.js',
     path: path.resolve(__dirname, 'dist'),
   },
 });
@@ -30,5 +39,5 @@ var backgroundConfig = Object.assign({}, config,{
 });
 
 module.exports = [
-  contentConfig, backgroundConfig,
+  jabraConfig, ringtoneConfig, backgroundConfig,
 ];

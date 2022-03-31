@@ -3,6 +3,14 @@
     "description": "Allow Jabra headsets to pick and hangup Trengo calls automatically",
     "version": "1.0",
     "manifest_version": 3,
+    "permissions": [
+        "scripting",
+        "tabs",
+        "webNavigation"
+    ],
+    "host_permissions": [
+        "https://*.trengo.com/*"
+    ],
     "icons": {
         "16": "dist/16.png",
         "48": "dist/48.png",
@@ -20,7 +28,7 @@
                 "https://*.trengo.com/*"
             ],
             "js": [
-                "dist/content.js"
+                "dist/jabra.js"
             ]
         }
     ]

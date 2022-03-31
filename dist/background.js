@@ -1,1 +1,1 @@
-chrome.action.onClicked.addListener((e=>{chrome.tabs.sendMessage(e.id,{type:"consent"})}));
+chrome.action.onClicked.addListener((e=>{chrome.tabs.sendMessage(e.id,{type:"consent"})})),chrome.webNavigation.onCompleted.addListener((({tabId:e})=>{console.log(`Injected ringtone script in tab ${e}`),chrome.scripting.executeScript({target:{tabId:e},files:["dist/ringtone.js"],world:"MAIN"})}),{url:[{urlMatches:"https://app.trengo.com/"}]});
