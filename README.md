@@ -12,3 +12,6 @@ Chrome extension to allow Jabra headsets to pickup and hangup Trengo calls autom
 
 ## Tested with
 * Jabra Pro 930
+
+## Bonus functions
+* Keep the incoming call ringtone ringing for calls that are in queue, never miss a call again!
