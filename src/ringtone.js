@@ -46,7 +46,7 @@ const main = async () => {
       play()
     }
 
-    await delay(2000)
+    await delay(30000)
   }
 }
 
